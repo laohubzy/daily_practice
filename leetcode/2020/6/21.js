@@ -8,6 +8,13 @@ class Node {
 const defaultCompare = (left, right) => {
     return left.key >= right.key
 }
+const BalanceFactor = {
+    UNBALANCED_RIGHT: 1,
+    SLIGHTLY_UNBALANCED_RIGHT: 2,
+    BALANCED: 3,
+    SLIGHTLY_UNBALANCED_LEFT: 4,
+    UNBALANCED_LEFT: 5
+}
 class BinarySearchTree {
     constructor(compareFn = defaultCompare) {
         this.compareFn = compareFn
@@ -116,6 +123,40 @@ class BinarySearchTree {
     remove(key) {
         const node = ths.search(key)
     }
+    getHeight(node) {
+        if(node === null) {
+            return -1
+        }
+        return Math.max(this.getHeight(node.left), this.getHeight(node.right)) + 1
+    }
+    getBalanceFactor(node) {
+        const heightDifference = this.getHeight(node.left) - this.getHeight(node.right)
+        switch (heightDifference) {
+            case -2:    // 右边不平衡
+                return BalanceFactory.UNBALANCED_RIGHT;
+            case -1:    // 右边有点点不平衡
+                return BalanceFactory.SLIGHTLY_UNBALANCED_RIGHT;
+            case 0:    // 平衡
+                return BalanceFactory.BALANCED;
+            case 1:    // 左边有点点不平衡
+                return BalanceFactory.SLIGHTLY_UNBALANCED_LEFT;
+            case 2:    // 左边不平衡
+                return BalanceFactory.UNBALANCED_LEFT;
+        }
+    }
+    rotationLL(node) {
+        const temp = node.left
+        node.left = temp.right
+        temp.right = node
+        return temp
+    }
+    rotationRR(node) {
+        const temp = node.right
+        node.right = node.left
+        temp.left = node
+        return temp
+    }
+    rotationRR
 }
 
 const tree = new BinarySearchTree()
@@ -128,4 +169,20 @@ tree.insert(51)
 tree.insert(33)
 tree.insert(23)
 tree.insert(10)
-console.log(tree.max())
+console.log(tree.getBalanceFactor())
+
+
+const getTree = (list) => {
+    const tree = new BinarySearchTree()
+    list.forEach(i => {
+        tree.insert(i)
+    })
+    return tree
+}
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(key) {
+ *     this.val = key;
+ *     this.left = this.right = null;
+ * }
+ */
