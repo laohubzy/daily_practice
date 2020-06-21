@@ -13,7 +13,6 @@ class BinarySearchTree {
         this.compareFn = compareFn
         this.root = null
     }
-
     insert(key) {
         if(!this.root) {
             this.root = new Node(key)
